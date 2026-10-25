@@ -1,0 +1,13 @@
+// Prisma 7 schema. Models are added in Phase 1B; this file starts with
+// only the generator and datasource so `prisma generate` runs in postinstall.
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+  // The connection URL lives in prisma.config.ts (Prisma 7).
+}
