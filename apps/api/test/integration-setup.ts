@@ -9,5 +9,8 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
+  // Leave the database empty so a later migration with new constraints never
+  // trips over rows left behind by this file (e.g. invalid rows from a red run).
+  await resetDatabase();
   await testPrisma.$disconnect();
 });

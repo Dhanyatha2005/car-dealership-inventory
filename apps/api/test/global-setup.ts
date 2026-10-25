@@ -59,7 +59,16 @@ function migrateDeploy(url: string): void {
   const env: NodeJS.ProcessEnv = { ...process.env, DATABASE_URL: url };
   // prisma.config.ts prefers DIRECT_DATABASE_URL; never let it redirect test migrations.
   delete env.DIRECT_DATABASE_URL;
-  execFileSync('npx', ['prisma', 'migrate', 'deploy'], { cwd: apiRoot, env, stdio: 'pipe' });
+  try {
+    execFileSync('npx', ['prisma', 'migrate', 'deploy'], { cwd: apiRoot, env, stdio: 'pipe' });
+  } catch (error) {
+    // Re-throw with Prisma's output as plain text so Vitest prints the real cause.
+    const { stdout, stderr } = error as { stdout?: Buffer; stderr?: Buffer };
+    throw new Error(
+      `prisma migrate deploy failed for ${new URL(url).pathname.slice(1)}:\n${String(stdout ?? '')}${String(stderr ?? '')}`,
+      { cause: error },
+    );
+  }
 }
 
 export default async function setup(project: TestProject): Promise<void> {
