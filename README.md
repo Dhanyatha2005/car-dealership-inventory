@@ -65,7 +65,30 @@ _TBD_
 
 ## My AI Usage
 
-_TBD_
+**Tools used**
+
+- **Claude Code (Claude Opus 5.5)** was the primary tool. It acted as an orchestrator that spawned sub-agents: a planner agent, then phase agents running in parallel in isolated git worktrees.
+- **ChatGPT** produced a pre-development audit that I used as a second opinion on the stack and on gaps in the requirements.
+
+**How I used them**
+
+1. **Requirements and stack.** I gave Claude Code the kata document and asked it to choose a stack only after reading the full scope. It chose Express + TypeScript, PostgreSQL + Prisma, shared Zod contracts and React + Tailwind. I then compared that against the ChatGPT audit. The two agreed on the core. I kept one deliberate difference: Bearer JWT instead of an HTTP-only cookie, because it matches the spec's wording and works across origins.
+2. **Planning.** A planner agent produced [`docs/plan.md`](docs/plan.md): the folder tree, ports and adapters interfaces, the Prisma schema, the API contract, and a red/green commit sequence. It also checked npm package versions against the registry, and caught that `prisma@latest` resolves to an 8.0 release candidate.
+3. **Implementation.** Phase agents wrote the tests first and committed them failing (`test:` commits), then committed the implementation (`feat:` commits). Agents ran in parallel in separate git worktrees, each with its own Postgres test database. Claude Code merged the branches and ran the lint, typecheck and test gate after each merge.
+4. **Design.** I designed the UI direction myself (light neumorphism, [`docs/design`](docs/design)). The agents implemented it as design tokens and primitives.
+5. **Review.** The orchestrator reviewed every agent report. It found and fixed issues such as the money helpers not being exported. It also rewrote commit authorship so that commits link to my GitHub account.
+
+**Reflection**
+
+AI made the architecture and test scaffolding dramatically faster. Parallel agents with strict file ownership and red/green rules produced a clean, traceable history. Human decisions still mattered where the spec was ambiguous:
+
+- purchase semantics: recorded purchases with a price snapshot
+- the role matrix
+- soft deletes
+- fixed categories
+- the design language
+
+The biggest risk was speed against quality. Time-boxing the agents left some phases partial, and I've recorded that honestly in the commit history and in the status below. Every commit made with AI carries a `Co-Authored-By: Claude` trailer, and the raw session log is in [`PROMPTS.md`](PROMPTS.md).
 
 ## Deployment
 
