@@ -1,15 +1,29 @@
+/** Process entry point: env → prisma → adapters → modules → app → listen. */
 import { createApp } from './app';
+import { parseEnv } from './config/env';
+import { createAuthenticate } from './http/middleware/authenticate';
+import { BcryptPasswordHasher } from './infra/bcrypt-password-hasher';
+import { JoseTokenService } from './infra/jose-token-service';
+import { createPrismaClient } from './infra/prisma';
+import { buildModules } from './modules/index';
 
-/**
- * Process entry point. Phase 1C replaces this stub with:
- * loadEnv → prisma → buildContainer → createApp → listen, plus graceful shutdown.
- */
-const port = Number(process.env.PORT ?? 4000);
+const env = parseEnv(process.env);
+const prisma = createPrismaClient(env.DATABASE_URL);
+const hasher = new BcryptPasswordHasher(env.BCRYPT_COST);
+const tokens = new JoseTokenService(env.JWT_SECRET, env.JWT_EXPIRES_IN);
+const authenticate = createAuthenticate(tokens);
 
-const server = createApp().listen(port, () => {
-  console.log(`API listening on http://localhost:${port}`);
+const modules = buildModules({ prisma, tokens, hasher, authenticate });
+const app = createApp(modules, { corsOrigins: env.CORS_ORIGINS });
+
+const server = app.listen(env.PORT, () => {
+  console.log(`API listening on http://localhost:${env.PORT}`);
 });
 
-const shutdown = () => server.close(() => process.exit(0));
+const shutdown = () => {
+  server.close(() => {
+    void prisma.$disconnect().finally(() => process.exit(0));
+  });
+};
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
