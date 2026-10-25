@@ -1,10 +1,18 @@
-/**
- * Placeholder shell. Phase 1D replaces it with providers and the router.
- */
-export function App() {
+import { useState } from 'react';
+import type { ReactElement } from 'react';
+import { createBrowserRouter, createMemoryRouter, RouterProvider } from 'react-router';
+import { Providers } from './providers';
+import { routes } from './router';
+
+export function App({ initialPath }: { initialPath?: string }): ReactElement {
+  const [router] = useState(() =>
+    initialPath
+      ? createMemoryRouter(routes, { initialEntries: [initialPath] })
+      : createBrowserRouter(routes),
+  );
   return (
-    <main className="min-h-screen bg-surface p-8 text-ink">
-      <h1 className="text-2xl font-semibold">Car Dealership Inventory</h1>
-    </main>
+    <Providers>
+      <RouterProvider router={router} />
+    </Providers>
   );
 }
