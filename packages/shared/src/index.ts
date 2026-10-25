@@ -1,7 +1,14 @@
 /**
  * @kata/shared public barrel.
  *
- * Phase 1A adds the contract modules (enums, errors, money, schemas/*) and
- * re-exports them from here. Consumers import only from '@kata/shared'.
+ * Consumers import only from '@kata/shared'. Production code in this package
+ * may import only zod (enforced by ESLint).
  */
 export const SHARED_PACKAGE_NAME = '@kata/shared';
+
+export * from './enums';
+export * from './errors';
+export * from './schemas/common';
+export * from './schemas/auth';
+export * from './schemas/vehicle';
+export * from './schemas/inventory';
