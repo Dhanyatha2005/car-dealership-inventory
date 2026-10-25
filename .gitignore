@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+*.tsbuildinfo
+
+# test output
+coverage/
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+
+# generated Prisma client (produced by `prisma generate` in postinstall)
+src/generated/
+
+# local environment (only .env.example and apps/api/.env.test are committed)
+.env
+.env.local
+.env.*.local
+
+# OS / editor
+.DS_Store
+*.log
+.idea/
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,12 @@
+node_modules
+dist
+coverage
+playwright-report
+test-results
+blob-report
+package-lock.json
+**/src/generated
+**/prisma/migrations
+
+# authoritative planning document, kept byte-for-byte as written
+docs/plan.md

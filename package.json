@@ -1,0 +1,57 @@
+{
+  "name": "kata",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Car Dealership Inventory System: TDD kata monorepo (Express API, React SPA, shared Zod contracts).",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "e2e"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "npm@11.3.0",
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,magenta \"npm run dev -w @kata/api\" \"npm run dev -w @kata/web\"",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test:unit && npm run test:web",
+    "test:unit": "npm run test -w @kata/shared && npm run test:unit -w @kata/api",
+    "test:integration": "npm run test:integration -w @kata/api",
+    "test:web": "npm run test -w @kata/web",
+    "test:e2e": "npm run test -w @kata/e2e",
+    "test:coverage": "npm run test:coverage --workspaces --if-present",
+    "test:report": "node scripts/generate-test-report.mjs",
+    "build": "npm run build -w @kata/api && npm run build -w @kata/web",
+    "db:up": "docker compose up -d --wait",
+    "db:migrate": "npm run db:migrate -w @kata/api",
+    "db:seed": "npm run db:seed -w @kata/api",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,mjs,cjs}": [
+      "eslint --fix --no-warn-ignored",
+      "prettier --write"
+    ],
+    "*.{json,md,css,html,yml,yaml}": "prettier --write"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.19.2",
+    "concurrently": "^10.0.6",
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.10",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.0"
+  }
+}
