@@ -1,5 +1,6 @@
-// Prisma 7 schema. Models are added in Phase 1B; this file starts with
-// only the generator and datasource so `prisma generate` runs in postinstall.
+// Prisma 7 schema (docs/plan.md section 3).
+// CHECK constraints and the pg_trgm extension live in raw SQL migrations;
+// Prisma ignores CHECK constraints during drift detection.
 
 generator client {
   provider     = "prisma-client"
@@ -10,4 +11,89 @@ generator client {
 datasource db {
   provider = "postgresql"
   // The connection URL lives in prisma.config.ts (Prisma 7).
+}
+
+// Must stay identical to the enums in @kata/shared (guarded by db-enums.int.test.ts).
+enum Role {
+  USER
+  ADMIN
+}
+
+enum VehicleCategory {
+  SEDAN
+  SUV
+  TRUCK
+  COUPE
+  HATCHBACK
+  CONVERTIBLE
+  VAN
+  WAGON
+}
+
+enum FuelType {
+  PETROL
+  DIESEL
+  HYBRID
+  ELECTRIC
+}
+
+enum Transmission {
+  MANUAL
+  AUTOMATIC
+}
+
+model User {
+  id           String     @id @default(uuid()) @db.Uuid
+  email        String     @unique @db.VarChar(254) // stored lowercase (normalized by Zod)
+  name         String     @db.VarChar(80)
+  passwordHash String     @map("password_hash")
+  role         Role       @default(USER)
+  purchases    Purchase[]
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime   @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@map("users")
+}
+
+model Vehicle {
+  id           String          @id @default(uuid()) @db.Uuid
+  make         String          @db.VarChar(80)
+  model        String          @db.VarChar(80)
+  category     VehicleCategory
+  priceCents   Int             @map("price_cents")
+  quantity     Int             @default(0)
+  year         Int
+  color        String?         @db.VarChar(40)
+  fuelType     FuelType?       @map("fuel_type")
+  transmission Transmission?
+  imageUrl     String?         @map("image_url") @db.VarChar(2048)
+  description  String?         @db.VarChar(2000)
+  isActive     Boolean         @default(true) @map("is_active")
+  archivedAt   DateTime?       @map("archived_at") @db.Timestamptz(3)
+  purchases    Purchase[]
+  createdAt    DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([isActive, createdAt(sort: Desc), id]) // default list ordering
+  @@index([isActive, category])
+  @@index([isActive, priceCents])
+  @@index([isActive, year])
+  @@index([make(ops: raw("gin_trgm_ops"))], type: Gin, map: "vehicles_make_trgm_idx") // ILIKE '%x%'
+  @@index([model(ops: raw("gin_trgm_ops"))], type: Gin, map: "vehicles_model_trgm_idx")
+  @@map("vehicles")
+}
+
+model Purchase {
+  id             String   @id @default(uuid()) @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  vehicleId      String   @map("vehicle_id") @db.Uuid
+  quantity       Int
+  unitPriceCents Int      @map("unit_price_cents")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  user           User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+  vehicle        Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([vehicleId])
+  @@map("purchases")
 }
