@@ -1,11 +1,11 @@
 import express, { type Express } from 'express';
+import type { ApiModule } from './http/api-module';
 
-/**
- * Builds the Express application without listening, so tests can drive it
- * with supertest. Phase 1C replaces this stub with createApp(container),
- * which mounts security middleware, modules and the error handler.
- */
-export function createApp(): Express {
+export interface CreateAppOptions {
+  corsOrigins: string[];
+}
+
+export function createApp(_modules: ApiModule[], _opts: CreateAppOptions): Express {
   const app = express();
   app.disable('x-powered-by');
   return app;

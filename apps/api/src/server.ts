@@ -6,7 +6,7 @@ import { createApp } from './app';
  */
 const port = Number(process.env.PORT ?? 4000);
 
-const server = createApp().listen(port, () => {
+const server = createApp([], { corsOrigins: [] }).listen(port, () => {
   console.log(`API listening on http://localhost:${port}`);
 });
 
