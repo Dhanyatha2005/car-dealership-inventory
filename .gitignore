@@ -28,3 +28,8 @@ playwright/.cache/
 !.vscode/extensions.json
 .vercel
 .env*
+
+# Vercel/Neon CLI artifacts
+.agents/
+.claude/
+skills-lock.json
