@@ -1,4 +1,4 @@
-import { Car, House, LogOut, Shield } from 'lucide-react';
+import { Car, House, LogOut, Shield, ShoppingBag } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { ReactElement } from 'react';
 import { NavLink, Outlet } from 'react-router';
@@ -11,7 +11,10 @@ interface NavItem {
   icon: LucideIcon;
 }
 
-const baseItems: NavItem[] = [{ to: '/', label: 'Showroom', icon: House }];
+const baseItems: NavItem[] = [
+  { to: '/', label: 'Showroom', icon: House },
+  { to: '/purchases', label: 'Purchases', icon: ShoppingBag },
+];
 const adminItem: NavItem = { to: '/admin', label: 'Admin', icon: Shield };
 
 function TopBar({ items }: { items: NavItem[] }): ReactElement {
