@@ -1,0 +1,44 @@
+/*
+ * Design tokens: the RE-SKIN SURFACE.
+ *
+ * The final design will be a LIGHT GLASS-NEUMORPHIC look: soft, raised glass
+ * panels that protrude from a pale surface, with frosted blur, gentle dual
+ * light/dark shadows (raised for panels and buttons, inset for inputs and
+ * pressed states), generous radii and a single accent colour.
+ *
+ * These values are placeholders. Phase 6 replaces them with the real design;
+ * components must consume tokens (via the Tailwind theme mapping in
+ * index.css) and never hard-code colours, shadows or radii.
+ */
+:root {
+  /* surface and ink */
+  --surface: #e9edf3;
+  --surface-raised: rgb(255 255 255 / 0.55);
+  --surface-inset: #e1e6ee;
+  --ink: #1f2937;
+  --ink-muted: #6b7280;
+
+  /* accent */
+  --accent: #4f46e5;
+  --accent-contrast: #ffffff;
+
+  /* feedback */
+  --danger: #dc2626;
+  --success: #16a34a;
+
+  /* neumorphic shadows: light from the top-left */
+  --shadow-light: rgb(255 255 255 / 0.9);
+  --shadow-dark: rgb(163 177 198 / 0.6);
+  --shadow-raised: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
+  --shadow-inset: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+
+  /* glass */
+  --blur-glass: 16px;
+  --border-glass: rgb(255 255 255 / 0.6);
+
+  /* radii */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-pill: 9999px;
+}

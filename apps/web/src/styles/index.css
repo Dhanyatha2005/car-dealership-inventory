@@ -1,0 +1,34 @@
+/*
+ * Tailwind v4 entry. Configuration lives in CSS (no tailwind.config.js).
+ * tokens.css defines the raw CSS variables; @theme inline maps them to
+ * Tailwind utilities (bg-surface, text-ink, shadow-raised, rounded-lg, ...).
+ * Placeholder mapping; Phase 1D/6 extend it.
+ */
+@import 'tailwindcss';
+@import './tokens.css';
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-inset: var(--surface-inset);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-accent: var(--accent);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+
+  --shadow-raised: var(--shadow-raised);
+  --shadow-inset: var(--shadow-inset);
+
+  --blur-glass: var(--blur-glass);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+}
+
+body {
+  background-color: var(--surface);
+  color: var(--ink);
+}
