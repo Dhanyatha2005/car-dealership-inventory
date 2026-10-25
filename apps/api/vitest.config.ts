@@ -30,6 +30,10 @@ export default defineConfig({
           include: ['test/integration/**/*.int.test.ts'],
           fileParallelism: false,
           pool: 'forks',
+          // Creates the test database if missing and runs `prisma migrate deploy` once per run.
+          globalSetup: ['./test/global-setup.ts'],
+          // Truncates all tables before each test and disconnects Prisma after each file.
+          setupFiles: ['./test/integration-setup.ts'],
         },
       },
     ],
