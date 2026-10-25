@@ -1,44 +1,70 @@
 /*
  * Design tokens: the RE-SKIN SURFACE.
  *
- * The final design will be a LIGHT GLASS-NEUMORPHIC look: soft, raised glass
- * panels that protrude from a pale surface, with frosted blur, gentle dual
- * light/dark shadows (raised for panels and buttons, inset for inputs and
- * pressed states), generous radii and a single accent colour.
+ * Light neumorphism / soft UI (docs/design/ui-reference.md). One cool light-grey
+ * surface everywhere; depth comes only from soft dual shadows. Light falls from
+ * the top-left: raised elements cast a dark shadow to the bottom-right and a
+ * white highlight to the top-left; inset elements are recessed.
  *
- * These values are placeholders. Phase 6 replaces them with the real design;
- * components must consume tokens (via the Tailwind theme mapping in
- * index.css) and never hard-code colours, shadows or radii.
+ * Components consume these through the Tailwind theme mapping in index.css
+ * (bg-surface, text-ink, shadow-raised, rounded-card, ...) and never hard-code
+ * colours, shadows or radii.
  */
 :root {
-  /* surface and ink */
-  --surface: #e9edf3;
-  --surface-raised: rgb(255 255 255 / 0.55);
-  --surface-inset: #e1e6ee;
-  --ink: #1f2937;
-  --ink-muted: #6b7280;
+  /* typography */
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
 
-  /* accent */
-  --accent: #4f46e5;
+  /* surface and ink */
+  --surface: #e7eaf0;
+  --ink: #253142; /* dark slate: headings, body text */
+  --ink-muted: #8993a4; /* secondary text, inactive icons, placeholders */
+  --ink-subtle: #a9b1bf; /* disabled text */
+
+  /* accent (restrained blue) */
+  --accent: #087ebb; /* active nav, active icons, primary actions */
+  --accent-strong: #066a9e; /* hover / pressed text on primary */
   --accent-contrast: #ffffff;
 
   /* feedback */
-  --danger: #dc2626;
-  --success: #16a34a;
+  --danger: #c2413b;
+  --success: #2f8f5b;
+  --warning: #b7791f;
 
-  /* neumorphic shadows: light from the top-left */
-  --shadow-light: rgb(255 255 255 / 0.9);
-  --shadow-dark: rgb(163 177 198 / 0.6);
-  --shadow-raised: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
-  --shadow-inset: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+  /* shadow colours */
+  --shadow-dark: rgb(163 171 187 / 0.6);
+  --shadow-dark-soft: rgb(163 171 187 / 0.55);
+  --shadow-light: rgb(255 255 255 / 0.85);
 
-  /* glass */
-  --blur-glass: 16px;
-  --border-glass: rgb(255 255 255 / 0.6);
+  /* elevation: cards, top bar, sidebar */
+  --shadow-raised: 7px 7px 16px var(--shadow-dark), -7px -7px 16px var(--shadow-light);
+  /* elevation: buttons, avatar, small chips at rest */
+  --shadow-raised-sm: 4px 4px 10px var(--shadow-dark), -4px -4px 10px var(--shadow-light);
+  /* recessed: inputs, search fields, active nav tile */
+  --shadow-inset:
+    inset 3px 3px 7px var(--shadow-dark-soft), inset -3px -3px 7px var(--shadow-light);
+  /* pressed: buttons while :active or aria-pressed */
+  --shadow-pressed:
+    inset 2px 2px 5px var(--shadow-dark-soft), inset -2px -2px 5px var(--shadow-light);
+  /* flat: disabled controls */
+  --shadow-flat: 0 0 0 0 transparent;
+
+  /* focus ring (accessibility): drawn with outline so it never fights the shadows */
+  --focus-ring-color: rgb(8 126 187 / 0.55);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 3px;
+
+  /* overlay behind dialogs */
+  --overlay: rgb(37 49 66 / 0.25);
 
   /* radii */
-  --radius-sm: 0.5rem;
-  --radius-md: 0.875rem;
-  --radius-lg: 1.25rem;
-  --radius-pill: 9999px;
+  --radius-card: 24px; /* cards, floating bars, dialogs */
+  --radius-field: 12px; /* inputs, nav tiles */
+  --radius-pill: 9999px; /* search fields, buttons, badges */
+
+  /* layout */
+  --topbar-height: 68px;
+  --sidebar-width: 85px;
+  --shell-gutter: 28px;
 }
