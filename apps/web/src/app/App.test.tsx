@@ -1,11 +1,23 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
+import { tokenStorage } from '@/lib/auth/token-storage';
 import { App } from './App';
 
-describe('web scaffold', () => {
-  it('renders the app heading', () => {
-    render(<App />);
+describe('App routing', () => {
+  afterEach(() => tokenStorage.clear());
 
-    expect(screen.getByRole('heading', { name: /car dealership inventory/i })).toBeInTheDocument();
+  it('redirects anonymous users to the login page', async () => {
+    render(<App initialPath="/" />);
+
+    expect(await screen.findByRole('heading', { name: /welcome back/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
+  });
+
+  it('renders the register page', async () => {
+    render(<App initialPath="/register" />);
+
+    expect(
+      await screen.findByRole('heading', { name: /create your account/i }),
+    ).toBeInTheDocument();
   });
 });
