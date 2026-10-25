@@ -12,3 +12,4 @@ export * from './schemas/common';
 export * from './schemas/auth';
 export * from './schemas/vehicle';
 export * from './schemas/inventory';
+export * from './money';
