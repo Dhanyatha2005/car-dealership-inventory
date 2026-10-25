@@ -1,34 +1,67 @@
 /*
  * Tailwind v4 entry. Configuration lives in CSS (no tailwind.config.js).
  * tokens.css defines the raw CSS variables; @theme inline maps them to
- * Tailwind utilities (bg-surface, text-ink, shadow-raised, rounded-lg, ...).
- * Placeholder mapping; Phase 1D/6 extend it.
+ * Tailwind utilities:
+ *   colours  bg-surface, text-ink, text-ink-muted, text-accent, ...
+ *   shadows  shadow-raised, shadow-raised-sm, shadow-inset, shadow-pressed, shadow-flat
+ *   radii    rounded-card, rounded-field, rounded-pill
+ *   font     font-sans (Inter)
  */
 @import 'tailwindcss';
 @import './tokens.css';
 
 @theme inline {
+  --font-sans: var(--font-sans);
+
   --color-surface: var(--surface);
-  --color-surface-raised: var(--surface-raised);
-  --color-surface-inset: var(--surface-inset);
   --color-ink: var(--ink);
   --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
   --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
   --color-accent-contrast: var(--accent-contrast);
   --color-danger: var(--danger);
   --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-overlay: var(--overlay);
+  --color-focus: var(--focus-ring-color);
 
   --shadow-raised: var(--shadow-raised);
+  --shadow-raised-sm: var(--shadow-raised-sm);
   --shadow-inset: var(--shadow-inset);
+  --shadow-pressed: var(--shadow-pressed);
+  --shadow-flat: var(--shadow-flat);
 
-  --blur-glass: var(--blur-glass);
+  --radius-card: var(--radius-card);
+  --radius-field: var(--radius-field);
+  --radius-pill: var(--radius-pill);
 
-  --radius-sm: var(--radius-sm);
-  --radius-md: var(--radius-md);
-  --radius-lg: var(--radius-lg);
+  --spacing-topbar: var(--topbar-height);
+  --spacing-sidebar: var(--sidebar-width);
+  --spacing-gutter: var(--shell-gutter);
 }
 
-body {
-  background-color: var(--surface);
-  color: var(--ink);
+/* Visible, consistent keyboard focus for every interactive element. */
+@utility focus-ring {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--surface);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+  }
 }
